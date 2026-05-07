@@ -1,0 +1,70 @@
+[gd_scene format=3 uid="uid://ch7hfmpyfk40h"]
+
+[ext_resource type="Script" uid="uid://j2qhdob6yfjm" path="res://scripts/main.gd" id="1_sugp2"]
+[ext_resource type="PackedScene" uid="uid://2vidiv5de8hy" path="res://scenes/enemy.tscn" id="2_jyhfs"]
+[ext_resource type="PackedScene" uid="uid://b1dm584bklwby" path="res://scenes/bomb.tscn" id="3_85g3d"]
+[ext_resource type="PackedScene" uid="uid://ce8nu2s6lsjem" path="res://scenes/chaser_enemy.tscn" id="3_o6xl0"]
+[ext_resource type="PackedScene" uid="uid://bukjgu6pl36qc" path="res://scenes/player.tscn" id="3_tbgi4"]
+[ext_resource type="PackedScene" uid="uid://cwfma6hixv53b" path="res://scenes/hud.tscn" id="4_jyhfs"]
+[ext_resource type="PackedScene" uid="uid://b060xa2tat3tp" path="res://scenes/power_up.tscn" id="4_tipki"]
+[ext_resource type="AudioStream" uid="uid://c6g6b3s2j6y7k" path="res://audio/gameover.wav" id="5_tbgi4"]
+[ext_resource type="AudioStream" uid="uid://bj6u3mar3y3yy" path="res://audio/House In a Forest Loop.ogg" id="6_tefeu"]
+
+[sub_resource type="Curve2D" id="Curve2D_sugp2"]
+_data = {
+"points": PackedVector2Array(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 480, 0, 0, 0, 0, 0, 480, 720, 0, 0, 0, 0, 0, 720, 0, 0, 0, 0, 0, 0)
+}
+point_count = 6
+
+[node name="Main" type="Node2D" unique_id=148451724]
+script = ExtResource("1_sugp2")
+enemy_scene = ExtResource("2_jyhfs")
+bomb_scene = ExtResource("3_85g3d")
+chaser_enemy_scene = ExtResource("3_o6xl0")
+powerup_scene = ExtResource("4_tipki")
+
+[node name="Backgorund" type="ColorRect" parent="." unique_id=1944700880]
+offset_right = 480.0
+offset_bottom = 720.0
+color = Color(0.18529886, 0.4116576, 0.99418634, 1)
+
+[node name="Player" parent="." unique_id=934590128 instance=ExtResource("3_tbgi4")]
+
+[node name="EnemyTimer" type="Timer" parent="." unique_id=1806614425]
+wait_time = 0.5
+
+[node name="ScoreTimer" type="Timer" parent="." unique_id=1112628330]
+
+[node name="ChaserEnemyTimer" type="Timer" parent="." unique_id=1929391944]
+wait_time = 30.0
+
+[node name="PowerUpTimer" type="Timer" parent="." unique_id=89955859]
+wait_time = 10.0
+
+[node name="BombTimer" type="Timer" parent="." unique_id=1257371873]
+wait_time = 20.0
+
+[node name="Path2D" type="Path2D" parent="." unique_id=126000384]
+curve = SubResource("Curve2D_sugp2")
+
+[node name="PathFollow2D" type="PathFollow2D" parent="Path2D" unique_id=280793065]
+position = Vector2(-0.08605957, 0)
+
+[node name="StartPosition" type="Marker2D" parent="." unique_id=721809676]
+position = Vector2(224, 550)
+
+[node name="HUD" parent="." unique_id=253189896 instance=ExtResource("4_jyhfs")]
+
+[node name="DeathSound" type="AudioStreamPlayer" parent="." unique_id=1985504321]
+stream = ExtResource("5_tbgi4")
+
+[node name="BackMusic" type="AudioStreamPlayer" parent="." unique_id=1506288587]
+stream = ExtResource("6_tefeu")
+
+[connection signal="hit" from="Player" to="." method="_on_player_hit"]
+[connection signal="timeout" from="EnemyTimer" to="." method="_on_enemy_timer_timeout"]
+[connection signal="timeout" from="ScoreTimer" to="." method="_on_score_timer_timeout"]
+[connection signal="timeout" from="ChaserEnemyTimer" to="." method="_on_chaser_enemy_timer_timeout"]
+[connection signal="timeout" from="PowerUpTimer" to="." method="_on_power_up_timer_timeout"]
+[connection signal="timeout" from="BombTimer" to="." method="_on_bomb_timer_timeout"]
+[connection signal="start" from="HUD" to="." method="_on_hud_start"]
