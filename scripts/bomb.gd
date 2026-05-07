@@ -15,8 +15,4 @@ func explode():
 	for e in enemies:
 		e.queue_free()
 
-	# som de explosão (se tiver)
-	if has_node("AudioStreamPlayer2D"):
-		$AudioStreamPlayer2D.play()
-
 	queue_free()
